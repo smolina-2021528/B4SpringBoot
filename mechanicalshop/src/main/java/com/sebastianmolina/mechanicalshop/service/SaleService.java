@@ -14,5 +14,5 @@ public interface SaleService {
     Sale save(Sale sale);
 
     void deleteById(Integer id);
-    
+
 }
