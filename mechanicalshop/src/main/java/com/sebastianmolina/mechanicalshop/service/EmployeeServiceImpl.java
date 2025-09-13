@@ -5,7 +5,6 @@ import com.sebastianmolina.mechanicalshop.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -17,30 +16,67 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> findAll() {
-
+    public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
-
     }
 
     @Override
-    public Optional<Employee> findById(Integer id) {
-
-        return employeeRepository.findById(id);
-
+    public Employee getEmployeeById(Integer id) {
+        return employeeRepository.findById(id).orElse(null);
     }
 
     @Override
-    public Employee save(Employee employee) {
-
+    public Employee saveEmployee(Employee employee) {
+        // Validaciones de unicidad antes de persistir
+        if (employeeRepository.existsByEmail(employee.getEmail())) {
+            String msg = "email: El correo ya está registrado";
+            System.out.println("⚠️ ALERTA - " + msg);
+            throw new IllegalArgumentException(msg);
+        }
+        if (employeeRepository.existsByFirstName(employee.getFirstName())) {
+            String msg = "firstName: El nombre ya está registrado";
+            System.out.println("⚠️ ALERTA - " + msg);
+            throw new IllegalArgumentException(msg);
+        }
+        if (employeeRepository.existsByLastName(employee.getLastName())) {
+            String msg = "lastName: El apellido ya está registrado";
+            System.out.println("⚠️ ALERTA - " + msg);
+            throw new IllegalArgumentException(msg);
+        }
         return employeeRepository.save(employee);
-
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public Employee updateEmployee(Integer id, Employee employee) {
+        Employee existingEmployee = employeeRepository.findById(id).orElse(null);
+        if (existingEmployee != null) {
+            // Validaciones de unicidad que excluyen el registro actual
+            if (employeeRepository.existsByEmailAndIdNot(employee.getEmail(), id)) {
+                String msg = "email: El correo ya está registrado por otro empleado";
+                System.out.println("⚠️ ALERTA - " + msg);
+                throw new IllegalArgumentException(msg);
+            }
+            if (employeeRepository.existsByFirstNameAndIdNot(employee.getFirstName(), id)) {
+                String msg = "firstName: El nombre ya está registrado por otro empleado";
+                System.out.println("⚠️ ALERTA - " + msg);
+                throw new IllegalArgumentException(msg);
+            }
+            if (employeeRepository.existsByLastNameAndIdNot(employee.getLastName(), id)) {
+                String msg = "lastName: El apellido ya está registrado por otro empleado";
+                System.out.println("⚠️ ALERTA - " + msg);
+                throw new IllegalArgumentException(msg);
+            }
 
+            existingEmployee.setFirstName(employee.getFirstName());
+            existingEmployee.setLastName(employee.getLastName());
+            existingEmployee.setEmail(employee.getEmail());
+            return employeeRepository.save(existingEmployee);
+        }
+        return null;
+    }
+
+    @Override
+    public void deleteEmployee(Integer id) {
         employeeRepository.deleteById(id);
-
     }
 }
