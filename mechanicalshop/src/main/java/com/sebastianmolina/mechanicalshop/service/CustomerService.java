@@ -1,18 +1,18 @@
 package com.sebastianmolina.mechanicalshop.service;
 
 import com.sebastianmolina.mechanicalshop.model.Customer;
-import java.util.List;
-import java.util.Optional;
 
+import java.util.List;
 
 public interface CustomerService {
 
-    List<Customer> findAll();
+    List<Customer> getAllCustomers();
 
-    Optional<Customer> findById(Integer id);
+    Customer getCustomerById(Integer id);
 
-    Customer save(Customer customer);
+    Customer saveCustomer(Customer customer);
 
-    void deleteById(Integer id);
+    Customer updateCustomer(Integer id, Customer customer);
 
+    void deleteCustomer(Integer id);
 }
