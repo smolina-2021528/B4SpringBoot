@@ -63,3 +63,8 @@ BEGIN
     WHERE id = NEW.product_id;
 END$$
 DELIMITER ;
+
+select * from Employee;
+select * from Sale;
+select * from Customer;
+select * from Product;

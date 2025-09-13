@@ -2,7 +2,6 @@ package com.sebastianmolina.mechanicalshop.controller;
 
 import com.sebastianmolina.mechanicalshop.model.Sale;
 import com.sebastianmolina.mechanicalshop.service.SaleService;
-import jakarta.validation.Valid;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,13 +34,13 @@ public class SaleController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createSale(@Valid @RequestBody Sale sale){
-        return ResponseEntity.ok(saleService.saveSale(sale));
+    public ResponseEntity<?> createSale(@RequestBody Map<String, Object> saleData){
+        return ResponseEntity.ok(saleService.saveSaleFromMap(saleData));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateSale(@PathVariable Integer id, @Valid @RequestBody Sale sale){
-        Sale updated = saleService.updateSale(id, sale);
+    public ResponseEntity<?> updateSale(@PathVariable Integer id, @RequestBody Map<String, Object> saleData){
+        Sale updated = saleService.updateSaleFromMap(id, saleData);
         if (updated == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "No se encontro la venta"));
         return ResponseEntity.ok(updated);
     }
