@@ -1,18 +1,13 @@
 package com.sebastianmolina.mechanicalshop.service;
 
 import com.sebastianmolina.mechanicalshop.model.Sale;
-import java.util.List;
-import java.util.Optional;
 
+import java.util.List;
 
 public interface SaleService {
-
-    List<Sale> findAll();
-
-    Optional<Sale> findById(Integer id);
-
-    Sale save(Sale sale);
-
-    void deleteById(Integer id);
-
+    List<Sale> getAllSales();
+    Sale getSaleById(Integer id);
+    Sale saveSale(Sale sale);
+    Sale updateSale(Integer id, Sale sale);
+    void deleteSale(Integer id);
 }
